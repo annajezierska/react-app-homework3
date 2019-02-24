@@ -11,6 +11,23 @@ class App extends Component {
       .then(people => this.setState({ people }))
       .catch(err => console.log(err));
   }
+   
+
+ handleToggleFav = personId => {
+   this.setState({
+     people: this.state.people.map(person => {
+      return (
+        personId === person.id ?
+       {
+         ...person,
+         isFavorite: !(person.isFavorite)
+       }
+         : person
+     )
+       })
+     })
+ }
+ 
 
   render() {
     return (
@@ -34,7 +51,7 @@ class App extends Component {
                   <td>{person.name}</td>
                   <td>{person.surname}</td>
                   <td>{person.phone}</td>
-                  <td><button>Toggle favorite</button></td>
+                  <td><button onClick={() => this.handleToggleFav(person.id)}>Toggle favorite</button></td>
                 </tr>
               );
             })}
