@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AddPeople from './AddPeople'
+import AddPeople from "./AddPeople";
 import "./App.css";
 
 class App extends Component {
@@ -12,49 +12,51 @@ class App extends Component {
       .then(people => this.setState({ people }))
       .catch(err => console.log(err));
   }
-   
 
- handleToggleFav = personId => {
-   this.setState({
-     people: this.state.people.map(person => {
-      return (
-        personId === person.id ?
-       {
-         ...person,
-         isFavorite: !(person.isFavorite)
-       }
-         : person
-     )
-       })
-     })
- }
-
-addName = (name, surname, phone) => {
-  if (name && surname && phone) {
+  handleToggleFav = personId => {
     this.setState({
-     people: this.state.people.concat({
-       id: Date.now(),
-       name: name,
-       surname: surname,
-       phone: phone,
-       isFavorite: false
-     })
-    })
-   }
- }
- 
+      people: this.state.people.map(person => {
+        return personId === person.id
+          ? {
+              ...person,
+              isFavorite: !person.isFavorite
+            }
+          : person;
+      })
+    });
+  };
+
+  addName = (name, surname, phone) => {
+    if (name && surname && phone) {
+      this.setState({
+        people: this.state.people.concat({
+          id: Date.now(),
+          name: name,
+          surname: surname,
+          phone: phone,
+          isFavorite: false
+        })
+      });
+    }
+  };
+
+  handleRemove = personId => {
+      this.setState({
+        people: this.state.people.filter(person => personId !== person.id)
+      })
+  }
 
   render() {
     return (
       <div className="App">
-        <AddPeople addName={this.addName}/>
+        <AddPeople addName={this.addName} />
         <table>
           <thead>
             <tr>
               <th>Name</th>
               <th>Surname</th>
               <th>Phone</th>
-              <th></th>
+              <th />
             </tr>
           </thead>
           <tbody>
@@ -67,7 +69,14 @@ addName = (name, surname, phone) => {
                   <td>{person.name}</td>
                   <td>{person.surname}</td>
                   <td>{person.phone}</td>
-                  <td><button onClick={() => this.handleToggleFav(person.id)}>Toggle favorite</button></td>
+                  <td>
+                    <button onClick={() => this.handleToggleFav(person.id)}>
+                      Toggle favorite
+                    </button>
+                  </td>
+                  <td>
+                    <button onClick={(() => this.handleRemove(person.id))}>Remove contact</button>
+                  </td>
                 </tr>
               );
             })}
